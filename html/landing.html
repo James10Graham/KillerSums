@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/index.css">
+    <title>Welcome</title>
+</head>
+<style>
+input{
+    width: 200px;
+    height: 50px;
+    letter-spacing: 3px;
+    font-size: 20px;
+    border: 1px solid black;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+table{
+    margin: 0 auto;
+    margin-top: 50px; 
+}
+</style>
+<body>
+    <h1 style="margin-top: 100px;" id="welcome"></h1>
+    <table>
+        <tr>
+            <td>
+                <input type="button" value="PLAY" onclick="window.location = '/preGame'">
+            </td>
+            <td>
+                <input type="button" value="LEADERBOARD" onclick="window.location = '/leaderboard'">
+            </td>
+        </tr>
+    </table>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    socket = io.connect("http://localhost:7000");
+    socket.emit('landing');
+
+    socket.on('revieveUser', (name)=>{
+        document.getElementById('welcome').innerHTML = "Welcome " + name + "!";
+    });
+</script>
+</html>

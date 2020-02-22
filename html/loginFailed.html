@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/index.css">
+    <title>Login</title>
+</head>
+<body>
+    <h1><u>KILLA SUMS</u></h1>
+    <form id="loginOrSignUp" action="/login" method="POST">
+        <table>
+            <tr>
+                <td>
+                    <input id="usernameInput" name="username" type="text" placeholder="USERNAME" required><br>
+                    <input id="passwordInput" name="password" type="password" placeholder="PASSWORD" required>
+                </td>
+                <td>
+                    <input id="submit" type="submit" value="submit" required>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <input id="signUp" type="button" value="register" onclick= "window.location = '/register'">
+    <h3>LOGIN FAILED!</h3>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/index.css">
+    <title>Leaderboard</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<style>
+table{
+    margin: 0 auto;
+    font-size: 30px;
+}
+
+table td{
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+input[type="button"]{
+    border: 1px solid black;
+    border-radius: 5px;
+    font-size: 20px;
+    letter-spacing: 3px;
+    width: 110px;
+    height: 50px;
+    cursor: pointer;
+}
+input[type='button']:hover{
+    background-color: #ccc;
+}
+</style>
+<body>
+    <h1>LEADER BOARDS</h1>
+    <table>
+        <tr>
+            <td>USERNAME</td>
+            <td>SCORE</td>
+            <td>DIFFICULTY</td>
+        </tr>
+    </table>
+    <input type="button" value="HOME" onclick="window.location = '/welcome'">
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+socket = io.connect('http://localhost:7000');
+socket.emit('leaderConnect');
+socket.on('postScores', (scoresObject)=>{
+    console.log('object recieved: ' + scoresObject);
+    for(var i = 0; i < scoresObject.length; i++){
+        var username = scoresObject[i].username;
+        var score = scoresObject[i].score;
+        var difficulty = scoresObject[i].difficulty;
+        var appendItem = `
+        <tr>
+            <td>${username}</td>
+            <td>${score}</td>
+            <td>${difficulty}</td>    
+        </tr>
+        `
+        $("table").append(appendItem);
+    }
+});
+</script>
+</html>

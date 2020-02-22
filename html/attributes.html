@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Attributes</title>
+</head>
+<style>
+*{
+    text-align: center;
+}
+
+body{
+    background-image: linear-gradient(to right, #50B7A9, #FECF5B,#50B7A9);
+}
+
+input[type='button']{
+    border: 1px black solid;
+    border-radius: 5px;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    cursor: pointer;
+}
+input[type='button']:hover{
+    background-color: #ccc;
+}
+
+table tr{
+    margin-top: 20px;
+}
+table{
+    margin: 0 auto;
+}
+
+#play{
+    border: 1px solid black;
+    border-radius: 5px;
+    font-size: 20px;
+    letter-spacing: 3px;
+    width: 110px;
+}
+</style>
+</style>
+<body>
+    <h1 style="margin-top: 100px;">MOVES LEFT: <span id="movesLeft">0</span></h1>
+    <table>
+        <tr class="maxHealthRow">
+            <td>
+                <h3>MAX HEALTH:</h3>
+            </td>
+            <td>
+                <input type="button" value="&#8679;" onclick="healthUp()">
+            </td>
+            <td>
+                <input type="button" value="&#8681;" onclick="healthDown()">
+            </td>
+            <td>
+                <h3 id="healthOutput">0 100</h3>
+            </td>
+        </tr>
+        <tr class="speed">
+            <td>
+                <h3>MOVEMENT SPEED:</h3>
+            </td>
+            <td>
+                <input type="button" value="&#8679;" onclick="speedUp()">
+            </td>
+            <td>
+                <input type="button" value="&#8681;" onclick="speedDown()">
+            </td>
+            <td>
+                <h3 id="speedOutput">0 300</h3>
+            </td>
+        </tr>
+        <tr class="damage">
+            <td>
+                <h3>OTHER BULLET DAMAGE:</h3>
+            </td>
+            <td>
+                <input type="button" value="&#8679;" onclick="damageUp()">
+            </td>
+            <td>
+                <input type="button" value="&#8681;" onclick="damageDown()">
+            </td>
+            <td>
+                <h3 id="damageOutput">0 160</h3>
+            </td>
+        </tr>
+        <tr class="bulletSpeed">
+            <td>
+                <h3>BULLET SPEED:</h3>
+            </td>
+            <td>
+                <input type="button" value="&#8679;" onclick="bSpeedUp()">
+            </td>
+            <td>
+                <input type="button" value="&#8681;" onclick="bSpeedDown()">
+            </td>
+            <td>
+                <h3 id="bSpeedOutput">0 500</h3>
+            </td>
+        </tr>
+        <tr class="regen">
+            <td>
+                <h3>REGEN PER KILL:</h3>
+            </td>
+            <td>
+                <input type="button" value="&#8679;" onclick="regenUp()">
+            </td>
+            <td>
+                <input type="button" value="&#8681;" onclick="regenDown()">
+            </td>
+            <td>
+                <h3 id="regenOutput">0 50</h3>
+            </td>
+        </tr>
+    </table>
+    <h3 id="err"></h3>
+    <input id="play" type="button" value="PLAY" onclick="play()">
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+
+var socket = io.connect('http://localhost:7000');
+
+socket.emit('attributeConnection');
+socket.on('getScore',(score)=>{
+    value = score;
+    console.log(score);
+    console.log("speed: "+speed);
+    document.getElementById('movesLeft').innerHTML = score;
+});
+
+var speed = 300;
+var health = 100;
+var damage = 160;
+var regen = 50;
+var bulletSpeed = 500;
+
+var speedCount = 0;
+var healthCount = 0;
+var damageCount = 0;
+var regenCount = 0;
+var bulletSpeedCount = 0;
+
+var value;
+
+var healthUp = function(){
+    if(value != 0 && healthCount != 6){
+        healthCount ++;
+        health += 100;
+        value --;
+        document.getElementById('movesLeft').innerHTML = value;
+        document.getElementById('healthOutput').innerHTML = healthCount + " " + health;
+        document.getElementById('err').innerHTML = "";
+    }
+    else{
+        if(value == 0){
+            document.getElementById('err').innerHTML = "No Points Left!";
+        }
+        else{
+            document.getElementById('err').innerHTML = "Health Maxed Out!";
+        }
+    }
+};
+
+var healthDown = function(){
+    if(healthCount != 0){
+        healthCount --;
+        health -= 100;
+        value ++;
+        document.getElementById('movesLeft').innerHTML = value;
+        document.getElementById('healthOutput').innerHTML = healthCount + " " + health;
+        document.getElementById('err').innerHTML = "";
+    }
+    else{
+        if(healthCount == 0){
+            document.getElementById('err').innerHTML = "Minimum Health Value!";
+        }
+    }
+};
+
+var speedUp = function(){
+    if(value != 0 && speedCount != 6){
+        speedCount ++;
+        speed += 50;
+        value --;
+        document.getElementById('movesLeft').innerHTML = value;
+        document.getElementById('speedOutput').innerHTML = speedCount + " " + speed;
+        document.getElementById('err').innerHTML = "";
+    }
+    else{
+        if(value == 0){
+            document.getElementById('err').innerHTML = "No Points Left!";
+        }
+        else{
+            document.getElementById('err').innerHTML = "Speed Maxed Out!";
+        }
+    }
+};
+
+var speedDown = function(){
+    if(speedCount != 0){
+        speedCount --;
+        speed -= 50;
+        value ++;
+        document.getElementById('movesLeft').innerHTML = value;
+        document.getElementById('speedOutput').innerHTML = speedCount + " " + speed;
+        document.getElementById('err').innerHTML = "";
+    }
+    else{
+        if(speedCount == 0){
+            document.getElementById('err').innerHTML = "Minimum Speed Value!";
+        }
+    }   
+};
+
+var bSpeedUp = function(){
+    if(value != 0 && bulletSpeedCount != 6){
+        bulletSpeedCount ++;
+        bulletSpeed += 100;
+        value --;
+        document.getElementById('movesLeft').innerHTML = value;
+        document.getElementById('bSpeedOutput').innerHTML = bulletSpeedCount + " " + bulletSpeed;
+        document.getElementById('err').innerHTML = "";
+    }
+    else{
+        if(value == 0){
+            document.getElementById('err').innerHTML = "No Points Left!";
+        }
+        else{
+            document.getElementById('err').innerHTML = "Bullet Speed Maxed Out!";
+        }
+    }
+};
+
+var bSpeedDown = function(){
+    if(bulletSpeedCount != 0){
+        bulletSpeedCount --;
+        bulletSpeed -= 100;
+        value ++;
+        document.getElementById('movesLeft').innerHTML = value;
+        document.getElementById('bSpeedOutput').innerHTML = bulletSpeedCount + " " + bulletSpeed;
+        document.getElementById('err').innerHTML = "";
+    }
+    else{
+        if(bulletSpeedCount == 0){
+            document.getElementById('err').innerHTML = "Minimum Bullet Speed Value!";
+        }
+    }    
+};
+
+var damageUp = function(){
+    if(value != 0 && damageCount != 6){
+        damageCount ++;
+        damage -= 15;
+        value --;
+        document.getElementById('movesLeft').innerHTML = value;
+        document.getElementById('damageOutput').innerHTML = damageCount + " " + damage;
+        document.getElementById('err').innerHTML = "";
+    }
+    else{
+        if(value == 0){
+            document.getElementById('err').innerHTML = "No Points Left!";
+        }
+        else{
+            document.getElementById('err').innerHTML = "Damage Maxed Out!";
+        }
+    }
+};
+
+var damageDown = function(){
+    if(damageCount != 0){
+        damageCount --;
+        damage += 15;
+        value ++;
+        document.getElementById('movesLeft').innerHTML = value;
+        document.getElementById('damageOutput').innerHTML = damageCount + " " + damage;
+        document.getElementById('err').innerHTML = "";
+    }
+    else{
+        if(damageCount == 0){
+            document.getElementById('err').innerHTML = "Minimum Damage Value!";
+        }
+    }  
+};
+
+var regenUp = function(){
+    if(value != 0 && regenCount != 6){
+        regenCount ++;
+        regen += 5;
+        value --;
+        document.getElementById('movesLeft').innerHTML = value;
+        document.getElementById('regenOutput').innerHTML = regenCount + " " + regen;
+        document.getElementById('err').innerHTML = "";
+    }
+    else{
+        if(value == 0){
+            document.getElementById('err').innerHTML = "No Points Left!";
+        }
+        else{
+            document.getElementById('err').innerHTML = "Regen Maxed Out!";
+        }
+    }
+};
+
+var regenDown = function(){
+    if(regenCount != 0){
+        regenCount --;
+        regen -= 5;
+        value ++;
+        document.getElementById('movesLeft').innerHTML = value;
+        document.getElementById('regenOutput').innerHTML = regenCount + " " + regen;
+        document.getElementById('err').innerHTML = "";
+    }
+    else{
+        if(regenCount == 0){
+            document.getElementById('err').innerHTML = "Minimum Regen Value!";
+        }
+    }  
+};
+
+var play = function(){
+    socket.emit('recieveAttributes', health, speed, damage, bulletSpeed, regen);
+    console.log("sent attributes");
+    window.location.href = '/main';
+};
+</script>
+</html>
