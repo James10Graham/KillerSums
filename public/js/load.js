@@ -24,9 +24,10 @@ load.preload = function(){
         fill: '#000000'
     }).setOrigin(0.5); //this is black test that will appear when the white rectangle goes behind the text
 
-    for(let i = 0; i < 100; i++){
-        this.load.image('ship', 'assets/ship.png');
-    }//this is a lag simulator so the loader has a better effect!
+    // for(let i = 0; i < 100; i++){
+    //     this.load.image('ship', 'assets/ship.png');
+    // }
+    // this is a lag simulator so the loader has a better effect!
 
     this.load.on('progress', (percent)=>{
         this.loadingBar.fillRect(0, 0, 1024 * percent, 800);

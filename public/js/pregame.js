@@ -41,7 +41,7 @@ pregame.init = function(){
 
 pregame.create = function(){
 
-  this.socket = io.connect('http://localhost:7000');
+  this.socket = io.connect('http://172.20.10.4:7000');
     
   this.camera = this.cameras.main;
   

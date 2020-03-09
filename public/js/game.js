@@ -38,7 +38,7 @@ function create(){
 
   var self = this;
 
-  this.socket = io.connect('http://localhost:8000');
+  this.socket = io.connect('http://172.20.10.4:8000');
   this.socket.emit('connected');
 
   //groups

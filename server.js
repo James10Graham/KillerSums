@@ -61,11 +61,10 @@ app.get('/welcome', (req, res)=>{
 
 app.post('/login', urlencodedParser, (req, res)=>{
     console.log(req.body);
-    mySqlConnection.query("SELECT * FROM users WHERE username = ?", [req.body.username], (err, result, fields)=>{
+    mySqlConnection.query("SELECT * FROM users WHERE username = ?", [req.body.username], (err, result)=>{
         hashTwo = crypto.createHash('sha256');
         console.log(result);
         //console.log(results[0].password);
-        console.log("fields: "+fields);
         hashTwo.update(req.body.password);
         var hashedPassword = hashTwo.digest('hex');
         hashTwo.end();
